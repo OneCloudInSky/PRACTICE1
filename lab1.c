@@ -30,6 +30,16 @@ int *del_ind(int *data, int *size, int ind) {
 	return data;
 }
 
+int *delete_element(int *data, int *size, int delel) {
+	for (int i = 0; i < *size; i++) {
+		if (data[i] == delel) {
+			data = del_ind(data, size, i);
+			i--;
+		}
+	}
+	return data;
+}
+
 int main() {
 	printf("enter the lentgh of array: ");
 
@@ -63,6 +73,18 @@ int main() {
 	scanf("%i", &ind);
 
 	data = del_ind(data, &size, ind);
+
+	for (int i = 0; i < size; i++) {
+		printf("%i ", data[i]);
+	}
+
+	printf("\nenter the element to delete: ");
+
+	int delel;
+
+	scanf("%i", &delel);
+
+	data = delete_element(data, &size, delel);
 
 	for (int i = 0; i < size; i++) {
 		printf("%i ", data[i]);
