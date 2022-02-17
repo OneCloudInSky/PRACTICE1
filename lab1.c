@@ -11,7 +11,23 @@ int *plus_1(int *data, int *size, int new) {
 	}
 	temp[(*size) - 1] = new; 
 
+	free(data);
 	return temp;
+}
+
+int *del_ind(int *data, int *size, int ind) {
+	if (ind >= *size) 
+		return data;
+
+	(*size)--;
+
+	for (int i = ind; i < *size; i++) {
+		data[i] = data[i + 1];
+	}
+
+	data = (int*)realloc(data, sizeof(int) * (*size));
+
+	return data;
 }
 
 int main() {
@@ -25,7 +41,6 @@ int main() {
 	printf("enter the elements: ");
 
 	for (int i = 0; i < size; i++) {
-
 		scanf("%i", &data[i]);
 	}
 
@@ -38,8 +53,18 @@ int main() {
 	data = plus_1(data, &size, new);
 
 	for (int i = 0; i < size; i++) {
-
 		printf("%i ", data[i]);
 	}
 
+	printf("\nenter the index: ");
+
+	int ind;
+
+	scanf("%i", &ind);
+
+	data = del_ind(data, &size, ind);
+
+	for (int i = 0; i < size; i++) {
+		printf("%i ", data[i]);
+	}
 }
