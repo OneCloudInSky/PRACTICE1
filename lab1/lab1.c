@@ -1,17 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void* reallocdata(int* data, int size) {
+	int* tmp_ptr = (int*)realloc(data, size * sizeof(int));
+	if (tmp_ptr != NULL) data = tmp_ptr;
+}
+
+void freedata(int* data) {
+	free(data);
+}
+
 int *plus_1(int *data, int *size, int new) {
 	(*size)++;
 	int *temp = (int*)malloc(sizeof(int) * (*size));
-
 
 	for (int i = 0; i < (*size) - 1; i++){
 		temp[i] = data[i];
 	}
 	temp[(*size) - 1] = new; 
 
-	free(data);
+    freedata(data);
 	return temp;
 }
 
@@ -25,8 +33,7 @@ int *del_ind(int *data, int *size, int ind) {
 		data[i] = data[i + 1];
 	}
 
-	data = (int*)realloc(data, sizeof(int) * (*size));
-
+	reallocdata(data, (*size));
 	return data;
 }
 
