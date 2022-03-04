@@ -1,27 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void* reallocdata(int* data, int size) {
-	int* tmp_ptr = (int*)realloc(data, size * sizeof(int));
-	if (tmp_ptr != NULL) data = tmp_ptr;
-}
-
-void freedata(int* data) {
-	free(data);
-}
 
 int *plus_1(int *data, int *size, int new) {
 	(*size)++;
-	int *temp = (int*)malloc(sizeof(int) * (*size));
+	int *temp = (int*)malloc((*size) * sizeof(int));
 
-	for (int i = 0; i < (*size) - 1; i++){
+	for (int i = 0; i < (*size) - 1; i++) {
 		temp[i] = data[i];
 	}
-	temp[(*size) - 1] = new; 
 
-    freedata(data);
+	temp[(*size) - 1] = new;
+
+	free(data);
 	return temp;
 }
+
 
 int *del_ind(int *data, int *size, int ind) {
 	if (ind >= *size) 
@@ -33,9 +27,10 @@ int *del_ind(int *data, int *size, int ind) {
 		data[i] = data[i + 1];
 	}
 
-	reallocdata(data, (*size));
+	data = (int*)realloc(data, (*size) * sizeof(int));
 	return data;
 }
+
 
 int *delete_element(int *data, int *size, int delel) {
 	for (int i = 0; i < *size; i++) {
@@ -52,8 +47,9 @@ int main() {
 
 	int size;
 	scanf("%i", &size);
+	int exit;
 
-	int* data = (int*)malloc(sizeof(int) * size);
+	int *data = (int*)malloc(sizeof(int) * size);
 
 	printf("enter the elements: ");
 
@@ -61,7 +57,10 @@ int main() {
 		scanf("%i", &data[i]);
 	}
 
-	printf("enter the new element: ");
+
+	
+
+	printf("\nenter the new element: ");
 
 	int new;
 
@@ -70,7 +69,7 @@ int main() {
 	data = plus_1(data, &size, new);
 
 	for (int i = 0; i < size; i++) {
-		printf("%i ", data[i]);
+			printf("%i ", data[i]);
 	}
 
 	printf("\nenter the index: ");
@@ -84,7 +83,6 @@ int main() {
 	for (int i = 0; i < size; i++) {
 		printf("%i ", data[i]);
 	}
-
 	printf("\nenter the element to delete: ");
 
 	int delel;
