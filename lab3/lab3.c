@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MALLOC_FAILED -1
+
+void freedata(int* data) {
+	free(data);
+}
 
 int *create(int *size, int *exit) {
 	int *data = (int*)malloc(sizeof(int) * (*size));
@@ -8,12 +13,17 @@ int *create(int *size, int *exit) {
 		printf("enter the elements: ");
 		for (int i = 0; i < *size; i++) {
 			scanf("%i", &data[i]);
+			if (&data[i] == NULL) {
+				printf("scanf error");
+				freedata(data);
+				return 0;
+			}
 		}
 		return data;
 	}
 
 	else {
-		exit++;
+		*exit = MALLOC_FAILED;
 		return 0;
 	}
 }
@@ -23,14 +33,14 @@ void* reallocdata(int* data, int size) {
 	int* tmp_ptr = (int*)realloc(data, size * sizeof(int));
 	if (tmp_ptr != NULL) 
 		data = tmp_ptr;
+	else if (size == 0) {
+		data = tmp_ptr;
+	}
 	else {
 		printf("realloc error");
+		freedata(tmp_ptr);
+		exit(0);
 	}
-}
-
-
-void freedata(int* data) {
-	free(data);
 }
 
 int *plus_1(int *data, int *size, int new) {
@@ -73,11 +83,16 @@ int main() {
 
 		int size;
 		scanf("%i", &size);
+		if (&size == NULL) {
+			printf("scanf error");
+			exit(0);
+		}
+
 		int exit;
 
 		int *data = create(&size, &exit);
 
-		if (exit == 1) {
+		if (exit == MALLOC_FAILED) {
 			return 0;
 		}
 
@@ -88,6 +103,12 @@ int main() {
 			printf("\nchoose 1 - enter the new element, 2 - enter te index of the element you want to delete, 3 - enter the element you want to delete, everything else to end: ");
 			scanf("%i", &choose2);
 
+			if (&choose2 == NULL) {
+				freedata(data);
+				printf("scanf error");
+				return 0;
+			}
+
 			switch(choose2) {
 				case 1:
 					printf("\nenter the new element: ");
@@ -95,6 +116,11 @@ int main() {
 					int new;
 
 					scanf("%i", &new);
+
+					if (&new == NULL) {
+						printf("scanf error");
+						return 0;
+					}
 
 					data = plus_1(data, &size, new);
 
@@ -109,6 +135,11 @@ int main() {
 
 					scanf("%i", &ind);
 
+					if (&ind == NULL) {
+						printf("scanf error");
+						return 0;
+					}
+
 					data = del_ind(data, &size, ind);
 
 					for (int i = 0; i < size; i++) {
@@ -122,6 +153,11 @@ int main() {
 
 					scanf("%i", &delel);
 
+					if (&delel == NULL) {
+						printf("scanf error");
+						return 0;
+					}
+
 					data = delete_element(data, &size, delel);
 
 					for (int i = 0; i < size; i++) {
@@ -129,11 +165,19 @@ int main() {
 					};
 					break;
 				default:
+					freedata(data);
 					return 0;
 			}
 		}
 		int choose1;
 		printf("\nnext - 1, end - 0: ");
 		scanf("%i", &choose1);
+
+		if (&choose1 == NULL) {
+			printf("scanf error");
+			freedata(data);
+			return 0;
+		}
+
 	}
 }
