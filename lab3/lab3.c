@@ -2,28 +2,28 @@
 #include <stdlib.h>
 
 #define MALLOC_FAILED -1
+#define SCANF_ERROR "ERROR: FAILED TO GET A VALUE\n"
 
 void freedata(int* data) {
 	free(data);
 }
 
-int *create(int *size, int *exit) {
+int *create(int *size, int *ex) {
 	int *data = (int*)malloc(sizeof(int) * (*size));
 	if (data != NULL) {
 		printf("enter the elements: ");
 		for (int i = 0; i < *size; i++) {
-			scanf("%i", &data[i]);
-			if (&data[i] == NULL) {
-				printf("scanf error");
-				freedata(data);
-				return 0;
+			int check = scanf("%i", &data[i]);
+			if (check != 1) {
+				printf(SCANF_ERROR);
+				exit(0);
 			}
 		}
 		return data;
 	}
 
 	else {
-		*exit = MALLOC_FAILED;
+		*ex = MALLOC_FAILED;
 		return 0;
 	}
 }
@@ -82,9 +82,9 @@ int main() {
 		printf("\nenter the lentgh of array: ");
 
 		int size;
-		scanf("%i", &size);
-		if (&size == NULL) {
-			printf("scanf error");
+		int check = scanf("%i", &size);
+		if (check != 1) {
+			printf(SCANF_ERROR);
 			exit(0);
 		}
 
@@ -101,11 +101,11 @@ int main() {
 
 			int choose2;
 			printf("\nchoose 1 - enter the new element, 2 - enter te index of the element you want to delete, 3 - enter the element you want to delete, everything else to end: ");
-			scanf("%i", &choose2);
+			int check = scanf("%i", &choose2);
 
-			if (&choose2 == NULL) {
+			if (check != 1) {
 				freedata(data);
-				printf("scanf error");
+				printf(SCANF_ERROR);
 				return 0;
 			}
 
@@ -115,10 +115,10 @@ int main() {
 
 					int new;
 
-					scanf("%i", &new);
+					check = scanf("%i", &new);
 
-					if (&new == NULL) {
-						printf("scanf error");
+					if (check != 1) {
+						printf(SCANF_ERROR);
 						return 0;
 					}
 
@@ -133,10 +133,10 @@ int main() {
 
 					int ind;
 
-					scanf("%i", &ind);
+					check = scanf("%i", &ind);
 
-					if (&ind == NULL) {
-						printf("scanf error");
+					if (check != 1) {
+						printf(SCANF_ERROR);
 						return 0;
 					}
 
@@ -151,10 +151,10 @@ int main() {
 
 					int delel;
 
-					scanf("%i", &delel);
+					check = scanf("%i", &delel);
 
-					if (&delel == NULL) {
-						printf("scanf error");
+					if (check != 1) {
+						printf(SCANF_ERROR);
 						return 0;
 					}
 
@@ -171,10 +171,10 @@ int main() {
 		}
 		int choose1;
 		printf("\nnext - 1, end - 0: ");
-		scanf("%i", &choose1);
+		check = scanf("%i", &choose1);
 
-		if (&choose1 == NULL) {
-			printf("scanf error");
+		if (check != 1) {
+			printf(SCANF_ERROR);
 			freedata(data);
 			return 0;
 		}
