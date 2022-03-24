@@ -58,6 +58,96 @@ int pop (stack_t *st) { //извлечение верхушки стека
 	}
 }
 
+void swap_top2(stack_t *st) {
+	if (st->size == 1) {
+		printf("no need in swap");
+	}
+	else if (st->size == 0) {
+		printf(POP_ERROR);
+	}
+	else {
+		stack_t st2;
+		create(&st2);
+		int tmp1;
+		tmp1 = pop(st);
+		push(&st2, tmp1);
+		stack_t st3;
+		create(&st3);
+		int tmp2;
+		tmp2 = pop(st);
+		push(&st3, tmp2);
+		push(st, st2.ptr[0]);
+		push(st, st3.ptr[0]);
+		printf("\nswaped elements are: ");
+		printf("%i  ", tmp1);
+		printf("%i\n", tmp2);
+	}
+
+}
+
+void delete_bottom(stack_t *st) {
+	if (st->size == 1) {
+		printf("\ndeleted bottom element is: ");
+		printf("%i\n", st->ptr[0]);
+		pop(st);
+	}
+	else if (st->size == 0) {
+		printf("\nnothing to delete\n");
+	}
+	else{
+		stack_t st2;
+		create(&st2);
+		while (st->size != 1) {
+			push(&st2, st->ptr[st->size - 1]);
+			pop(st);
+		}
+		printf("\ndeleted element is: ");
+		printf("%i\n", st->ptr[0]);
+		pop(st);
+		while(st2.size != 0) {
+			push(st, st2.ptr[st2.size - 1]);
+			pop(&st2);
+		}
+	}
+}
+
+void swap_top_bottom(stack_t *st) {
+	if (st->size == 1) {
+		printf("\nno need in swap\n");
+	}
+	else if (st->size == 0) {
+		printf(POP_ERROR);
+	}
+	else {
+		stack_t st2;
+		create(&st2);
+		push(&st2, st->ptr[st->size - 1]);
+		pop(st);
+		stack_t st3;
+		create(&st3);
+		while (st->size != 1) {
+			push(&st3, st->ptr[st->size - 1]);
+			pop(st);
+		}
+		stack_t st4;
+		create(&st4);
+		push(&st4, st->ptr[0]);
+		pop(st);
+
+		push(st, st2.ptr[0]);
+		int tmp1 = pop(&st2);
+		while(st3.size != 0) {
+			push(st, st3.ptr[st3.size - 1]);
+			pop(&st3);
+		}
+		push(st, st4.ptr[0]);
+		int tmp2 = pop(&st4);
+		printf("\nswapped elements are: ");
+		printf("%i ", tmp1);
+		printf("%i\n", tmp2);
+	}
+}
+
 void task() { //список заданий
 	printf("\nclear the stack(1)\nadd an element(2)\npop the element(3)\nswap 2 top elements(4)\ndelete the bottom element(5)\nswap top and bottom(6)\nend(0)\n\n");
 }
@@ -68,6 +158,7 @@ void menu(stack_t *st) { //меню выбора заданий
 	int new_element;
 	int tmp_pop;
 	int tmp_clean;
+	int check_push;
 	while (choose != 0){
 		int choose;
 		printf("\nchoose the option(press 10 to show the task): ");
@@ -88,27 +179,32 @@ void menu(stack_t *st) { //меню выбора заданий
 					printf("\n     #######\n     #CLEAN#\n     #######\n");
 				break;
 			case 2:
-				printf("enter new element: ");
-				scanf("%i", &new_element);
+				printf("\nenter new element: ");
+				int check_push = scanf("%i", &new_element);
+				while (check_push != 1){
+					printf(SCANF_ERROR);
+					printf("\nenter new element: ");
+					int check_push = scanf("%i", &new_element);
+				}
 				push(st, new_element);
 				break;
 			case 3:
 				if (st->size != 0) {
 					printf("poped element is: ");
-					printf("%i", st->ptr[st->size - 1]);
+					printf("%i\n", st->ptr[st->size - 1]);
 					pop(st);
 				}
 				else
 					printf(POP_ERROR);
 				break;
 			case 4:
-				//
+				swap_top2(st);
 				break;
 			case 5:
-				//
+				delete_bottom(st);
 				break;
 			case 6:
-				//
+				swap_top_bottom(st);
 				break;
 			case 10:
 				task();
