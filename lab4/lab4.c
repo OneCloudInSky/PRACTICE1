@@ -54,22 +54,23 @@ void createcopy(stack_t* st, stack_t* new_st) {	// copy
 	
 }
 
-int push(stack_t *st, int a, int *push_Size) { //push element to stack
-	(*push_Size)++;
+int push(stack_t *st, int a) { //push element to stack
 	st->size++;
 	realloc_data(st, st->size);
 	st->ptr[st->size - 1] = a;
 	
 }
 
-int pop (stack_t *st,int *pop_Size) { //pop element to stack
+int pop (stack_t *st) { //pop element to stack
 	if (st->size != 0) {
 		int tmp = st->ptr[st->size - 1];
 		st->ptr[st->size - 1] = -1;
-		(*pop_Size)--;
 		st->size--;
 		realloc_data(st, st->size);
 		return tmp;
+	}
+	else {
+		return -1;
 	}
 }
 
@@ -94,12 +95,14 @@ void swap_TOP2(stack_t *st, int *tmp_Size) { // swap top two elements of stack
 		int st3_size = 0;
 		create(&st3);
 
-		tmp = pop(st, tmp_Size);
+		tmp = pop(st);
+		(*tmp_Size)--;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			exit(0);
 		}
-		push(&st2, tmp, &st2_size);
+		push(&st2, tmp);
+		st2_size++;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			exit(0);
@@ -108,13 +111,15 @@ void swap_TOP2(stack_t *st, int *tmp_Size) { // swap top two elements of stack
 		printf("Swapped elements are:");
 		printf("%i and ", tmp);
 
-		tmp = pop(st, tmp_Size);
+		tmp = pop(st);
+		(*tmp_Size)--;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			clean(&st2);
 			exit(0);
 		}
-		push(&st3, tmp, &st3_size);
+		push(&st3, tmp);
+		st3_size++;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			clean(&st2);
@@ -123,13 +128,15 @@ void swap_TOP2(stack_t *st, int *tmp_Size) { // swap top two elements of stack
 
 		printf("%i", tmp);
 
-		tmp = pop(&st2, &st2_size);
+		tmp = pop(&st2);
+		st2_size--;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			clean(&st2);
 			clean(&st3);
 		}
-		push(st, tmp, tmp_Size);
+		push(st, tmp);
+		(*tmp_Size)++;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			clean(&st2);
@@ -137,14 +144,16 @@ void swap_TOP2(stack_t *st, int *tmp_Size) { // swap top two elements of stack
 			exit(0);
 		}
 
-		tmp = pop(&st3, &st3_size);
+		tmp = pop(&st3);
+		(st3_size)--;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			clean(&st2);
 			clean(&st3);
 		}
 
-		push(st, tmp, tmp_Size);
+		push(st, tmp);
+		(*tmp_Size)++;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			clean(&st2);
@@ -177,12 +186,14 @@ void delete_BOTTOM(stack_t *st, int *tmp_Size) { // delete bottom element of sta
 		create(&st2);
 
 		while (*tmp_Size != 1) {
-			tmp = pop(st, tmp_Size);
+			tmp = pop(st);
+			(*tmp_Size)--;
 			if (succes_code == REALLOC_ERROR){
 				clean(st);
 				exit(0);
 			} 
-				push(&st2, tmp, &st2_size);
+			push(&st2, tmp);
+			(st2_size)++;
 			if (succes_code == REALLOC_ERROR) {
 				clean(st);
 				clean(&st2);
@@ -191,22 +202,25 @@ void delete_BOTTOM(stack_t *st, int *tmp_Size) { // delete bottom element of sta
 		}
 
 		printf("Deleted element is: ");
-		printf("%i", pop(st, tmp_Size));
+		printf("%i", pop(st));
+		(*tmp_Size)--;
 
 		while (st2_size != 0) {
-			tmp = pop(&st2, &st2_size);
-			if (succes_code == REALLOC_ERROR) {
-				clean(st);
-				clean(&st2);
-				exit(0);
-			}
-			push(st, tmp, tmp_Size);
+			tmp = pop(&st2);
+			(st2_size)--;
 			if (succes_code == REALLOC_ERROR) {
 				clean(st);
 				clean(&st2);
 				exit(0);
 			}
 		}
+		push(st, tmp);
+		(*tmp_Size)++;
+		if (succes_code == REALLOC_ERROR) {
+			clean(st);
+			clean(&st2);
+			exit(0);
+			}
 
 		clean(&st2);
 
@@ -240,12 +254,14 @@ void swap_TOPBOTTOM(stack_t *st, int *tmp_Size) { // swap top and bottom element
 		int st4_size = 0;
 		create(&st4);
 
-		tmp = pop(st, tmp_Size);
+		tmp = pop(st);
+		(*tmp_Size)--;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			exit(0);
 		}
-		push(&st2, tmp, &st2_size);
+		push(&st2, tmp);
+		st2_size++;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			exit(0);
@@ -254,14 +270,16 @@ void swap_TOPBOTTOM(stack_t *st, int *tmp_Size) { // swap top and bottom element
 		printf("%i and ", tmp);
 
 		while (*tmp_Size != 1) {
-			tmp = pop(st, tmp_Size);
+			tmp = pop(st);
+			(*tmp_Size)--;
 			if (succes_code == REALLOC_ERROR){
 				clean(st);
 				clean(&st2);
 				clean(&st3);
 				exit(0);
 			}
-			push(&st3, tmp, &st3_size);
+			push(&st3, tmp);
+			(st3_size)++;
 			if (succes_code == REALLOC_ERROR) {
 				clean(st);
 				clean(&st2);
@@ -271,14 +289,16 @@ void swap_TOPBOTTOM(stack_t *st, int *tmp_Size) { // swap top and bottom element
 
 		}
 
-		tmp = pop(st, tmp_Size);
+		tmp = pop(st);
+		(*tmp_Size)--;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			clean(&st2);
 			clean(&st3);
 			exit(0);
 		}
-		push(&st4, tmp, &st4_size);
+		push(&st4, tmp);
+		(st4_size)++;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			clean(&st2);
@@ -288,7 +308,8 @@ void swap_TOPBOTTOM(stack_t *st, int *tmp_Size) { // swap top and bottom element
 
 		printf("%i", tmp);
 
-		tmp = pop(&st2, &st2_size);
+		tmp = pop(&st2);
+		st2_size--;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			clean(&st2);
@@ -296,7 +317,8 @@ void swap_TOPBOTTOM(stack_t *st, int *tmp_Size) { // swap top and bottom element
 			clean(&st4);
 			exit(0);
 		}
-		push(st, tmp, tmp_Size);
+		push(st, tmp);
+		(*tmp_Size)++;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			clean(&st2);
@@ -306,7 +328,8 @@ void swap_TOPBOTTOM(stack_t *st, int *tmp_Size) { // swap top and bottom element
 		}
 
 		while (st3_size != 0) {
-			tmp = pop(&st3, &st3_size);
+			tmp = pop(&st3);
+			(st3_size)--;
 			if (succes_code == REALLOC_ERROR) {
 				clean(st);
 				clean(&st2);
@@ -314,7 +337,8 @@ void swap_TOPBOTTOM(stack_t *st, int *tmp_Size) { // swap top and bottom element
 				clean(&st4);
 				exit(0);
 			}
-			push(st, tmp, tmp_Size);
+			push(st, tmp);
+			(*tmp_Size)++;
 			if (succes_code == REALLOC_ERROR) {
 				clean(st);
 				clean(&st2);
@@ -324,7 +348,8 @@ void swap_TOPBOTTOM(stack_t *st, int *tmp_Size) { // swap top and bottom element
 			}
 		}
 
-		tmp = pop(&st4, &st4_size);
+		tmp = pop(&st4);
+		(st4_size)--;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			clean(&st2);
@@ -332,7 +357,8 @@ void swap_TOPBOTTOM(stack_t *st, int *tmp_Size) { // swap top and bottom element
 			clean(&st4);
 			exit(0);
 		}
-		push(st, tmp, tmp_Size);
+		push(st, tmp);
+		(*tmp_Size)++;
 		if (succes_code == REALLOC_ERROR) {
 			clean(st);
 			clean(&st2);
@@ -374,7 +400,8 @@ void menu(stack_t *st) { // what to do
 				while (st1_size != 0) {
 					printf("\ndeleted element is: ");
 					int tmp;
-					printf("%i\n", tmp = pop(st, &st1_size));
+					printf("%i\n", tmp = pop(st));
+					(st1_size)--;
 					if (succes_code == REALLOC_ERROR) {
 						clean(st);
 						exit(0);
@@ -395,7 +422,8 @@ void menu(stack_t *st) { // what to do
 					printf("\nenter new element: ");
 					int check_push = scanf("%i", &new_element);
 				}
-				push(st, new_element, &st1_size);
+				push(st, new_element);
+				st1_size++;
 				if (succes_code == REALLOC_ERROR) {
 					clean(st);
 					exit(0);
@@ -408,7 +436,8 @@ void menu(stack_t *st) { // what to do
 				if (st1_size != 0) {
 					printf("poped element is: ");
 					int tmp;
-					printf("%i\n", tmp = pop(st, &st1_size));
+					printf("%i\n", tmp = pop(st));
+					st1_size--;
 					if (succes_code == REALLOC_ERROR) {
 						clean(st);
 						exit(0);
