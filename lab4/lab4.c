@@ -5,6 +5,12 @@
 #define SUCCES 1
 #define REALLOC_ERROR 2
 #define SCANF_ERROR "ERROR:SCANF ERROR\n"
+<<<<<<< HEAD
+=======
+#define MALLOC_ERROR "ERROR:MALLOC ERROR\n"
+#define REALLOC_ERROR "ERROR:REALLOC ERROR\n"
+#define PUSH_ERROR "ERROR: STACK IS OUT OF RANGE\n"
+>>>>>>> ce1c11d00dd1c5c76bb8234cf3747f7d001320ac
 #define POP_ERROR "ERROR: STACK IS OUT OF RANGE\n"
 #define OPTION_CHOOSE_ERROR "ERROR:CHOOSE ANOTHER OPTION\n"
 
@@ -17,6 +23,7 @@ typedef struct arr { //structure
 	int size;
 } stack_t;
 
+<<<<<<< HEAD
 void clean(stack_t *st) {   // ГЋГ·ГЁГ±ГІГЄГ  ГЇГ Г¬ГїГІГЁ
 
 	free(st->ptr);
@@ -155,10 +162,42 @@ void swap_TOP2(stack_t *st, int *tmp_Size) { // swap top two elements of stack
 		clean(&st2);
 		clean(&st3);
 
+=======
+void realloc_data(stack_t *st) {
+	int *tmp_ptr = (int*)realloc(st->ptr, sizeof(int) * st->size);
+	if (tmp_ptr != NULL) {
+		st->ptr = tmp_ptr;
+	}
+	else if (st->size == 0) {
+		st->ptr = NULL;
+	}
+	else {
+		printf(REALLOC_ERROR);
+		free(st->ptr);
+		exit(0);
+	}
+	
+}
+
+void create(stack_t *st) { //создание стэка
+	st->size = 0;
+	st->ptr = NULL;
+}
+
+void push(stack_t *st, int a) { //добавление элемента в стек
+	if (st->size == STACK_MAX_SIZE) {
+		printf(PUSH_ERROR);
+	}
+	else {
+		st->size++;
+		realloc_data(st);
+		st->ptr[st->size - 1] = a;
+>>>>>>> ce1c11d00dd1c5c76bb8234cf3747f7d001320ac
 	}
 
 }
 
+<<<<<<< HEAD
 void delete_BOTTOM(stack_t *st, int *tmp_Size) { // delete bottom element of stack
 	if (*tmp_Size == 1) {
 		printf("\nno need in swap\n");
@@ -346,6 +385,110 @@ void swap_TOPBOTTOM(stack_t *st, int *tmp_Size) { // swap top and bottom element
 		clean(&st4);
 	}
 
+=======
+int pop (stack_t *st) { //извлечение верхушки стека
+	if (st->size != 0) {
+		int tmp = st->ptr[st->size - 1];
+		st->ptr[st->size - 1] = -1;
+		st->size--;
+		realloc_data(st);
+		return tmp;
+	}
+}
+
+void swap_top2(stack_t *st) {
+	if (st->size == 1) {
+		printf("no need in swap");
+	}
+	else if (st->size == 0) {
+		printf(POP_ERROR);
+	}
+	else {
+		stack_t st2;
+		create(&st2);
+		int tmp1;
+		tmp1 = pop(st);
+		push(&st2, tmp1);
+		stack_t st3;
+		create(&st3);
+		int tmp2;
+		tmp2 = pop(st);
+		push(&st3, tmp2);
+		push(st, st2.ptr[0]);
+		push(st, st3.ptr[0]);
+		printf("\nswaped elements are: ");
+		printf("%i  ", tmp1);
+		printf("%i\n", tmp2);
+	}
+
+}
+
+void delete_bottom(stack_t *st) {
+	if (st->size == 1) {
+		printf("\ndeleted bottom element is: ");
+		printf("%i\n", st->ptr[0]);
+		pop(st);
+	}
+	else if (st->size == 0) {
+		printf("\nnothing to delete\n");
+	}
+	else{
+		stack_t st2;
+		create(&st2);
+		while (st->size != 1) {
+			push(&st2, st->ptr[st->size - 1]);
+			pop(st);
+		}
+		printf("\ndeleted element is: ");
+		printf("%i\n", st->ptr[0]);
+		pop(st);
+		while(st2.size != 0) {
+			push(st, st2.ptr[st2.size - 1]);
+			pop(&st2);
+		}
+	}
+}
+
+void swap_top_bottom(stack_t *st) {
+	if (st->size == 1) {
+		printf("\nno need in swap\n");
+	}
+	else if (st->size == 0) {
+		printf(POP_ERROR);
+	}
+	else {
+		stack_t st2;
+		create(&st2);
+		push(&st2, st->ptr[st->size - 1]);
+		pop(st);
+		stack_t st3;
+		create(&st3);
+		while (st->size != 1) {
+			push(&st3, st->ptr[st->size - 1]);
+			pop(st);
+		}
+		stack_t st4;
+		create(&st4);
+		push(&st4, st->ptr[0]);
+		pop(st);
+
+		push(st, st2.ptr[0]);
+		int tmp1 = pop(&st2);
+		while(st3.size != 0) {
+			push(st, st3.ptr[st3.size - 1]);
+			pop(&st3);
+		}
+		push(st, st4.ptr[0]);
+		int tmp2 = pop(&st4);
+		printf("\nswapped elements are: ");
+		printf("%i ", tmp1);
+		printf("%i\n", tmp2);
+	}
+}
+
+void task() { //список заданий
+	printf("\nclear the stack(1)\nadd an element(2)\npop the element(3)\nswap 2 top elements(4)\ndelete the bottom element(5)\nswap top and bottom(6)\nend(0)\n\n");
+>>>>>>> ce1c11d00dd1c5c76bb8234cf3747f7d001320ac
 }
 
 void task() { // list of tasks
@@ -356,8 +499,14 @@ void menu(stack_t *st) { // what to do
 	int choose = 1;
 	task();
 	int new_element;
+<<<<<<< HEAD
 	int check_push;
 	int st1_size = 0;
+=======
+	int tmp_pop;
+	int tmp_clean;
+	int check_push;
+>>>>>>> ce1c11d00dd1c5c76bb8234cf3747f7d001320ac
 	while (choose != 0){
 		int choose;
 		printf("\nchoose the option(press 10 to show the task): ");
@@ -368,6 +517,7 @@ void menu(stack_t *st) { // what to do
 			int check = scanf("%i", &choose);
 		}
 		switch(choose) {
+<<<<<<< HEAD
 
 			case 1: {
 
@@ -388,6 +538,18 @@ void menu(stack_t *st) { // what to do
 
 			case 2: {
 
+=======
+			case 1:
+				while (st->size != 0) {
+					printf("\ndeleted element is: ");
+					printf("%i\n", st->ptr[st->size - 1]);
+					pop(st);
+				}
+				if (st->size == 0)
+					printf("\n     #######\n     #CLEAN#\n     #######\n");
+				break;
+			case 2:
+>>>>>>> ce1c11d00dd1c5c76bb8234cf3747f7d001320ac
 				printf("\nenter new element: ");
 				int check_push = scanf("%i", &new_element);
 				while (check_push != 1){
@@ -395,6 +557,7 @@ void menu(stack_t *st) { // what to do
 					printf("\nenter new element: ");
 					int check_push = scanf("%i", &new_element);
 				}
+<<<<<<< HEAD
 				push(st, new_element, &st1_size);
 				if (succes_code == REALLOC_ERROR) {
 					clean(st);
@@ -417,10 +580,23 @@ void menu(stack_t *st) { // what to do
 				else
 					printf(POP_ERROR);
 
+=======
+				push(st, new_element);
+				break;
+			case 3:
+				if (st->size != 0) {
+					printf("poped element is: ");
+					printf("%i\n", st->ptr[st->size - 1]);
+					pop(st);
+				}
+				else
+					printf(POP_ERROR);
+>>>>>>> ce1c11d00dd1c5c76bb8234cf3747f7d001320ac
 				break;
 			}
 
 			case 4:
+<<<<<<< HEAD
 				swap_TOP2(st, &st1_size);
 
 				break;
@@ -431,6 +607,15 @@ void menu(stack_t *st) { // what to do
 			case 6:
 				swap_TOPBOTTOM(st, &st1_size);
 
+=======
+				swap_top2(st);
+				break;
+			case 5:
+				delete_bottom(st);
+				break;
+			case 6:
+				swap_top_bottom(st);
+>>>>>>> ce1c11d00dd1c5c76bb8234cf3747f7d001320ac
 				break;
 			case 10:
 				task();
