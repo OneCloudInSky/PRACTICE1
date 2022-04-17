@@ -69,10 +69,7 @@ void addZero(queue_t* q) {
 			enqueue(&new_q, 0);
 			
 		}
-		for (int i = 0; i < new_q.size; i++) {
-			cout << new_q.arr[i] << ' ';
-		}
-		
+	
 		createCopy(&new_q, q);
 		delete_q(&new_q);
 		
@@ -175,50 +172,72 @@ void menu(queue_t* q) {
 				
 			}
 			case 2: {
+				
 				int deletedValue = dequeue(q);
+				
 				if (deletedValue != DEQUEUE_ERROR) {
 					outDeleted();
 					printf("%i\n", deletedValue);
 					outqueue(q);
+					
 				}
 				else {
+					
 					printf("\nDEQUEUE ERROR\n");
+					
 				}
+				
 				break;
 				
 			}
+			
 			case 3: {
+				
 				clean(q);
+				
 				break;
 				
 			}
+			
 			case 4: {
+				
 				addZero(q);
 				outqueue(q);
+				
 				break;
 				
 			}
+			
 			case 5: {
 				deleteTail(q);
 				outqueue(q);
+				
 				break;
 				
 			}
+			
 			case 6: {
+				
 				swapTailHead(q);
 				outqueue(q);
+				
 				break;
 				
 			}
 			case 0: {
+				
 				free(q->arr);
 				printf("\n     #####\n     #END#\n     #####\n");
 				exit(0);
+				
 				break;
 				
 			}
+			
 			default: {
+				
 				menu(q);
+				
 				break;
 				
 			}

@@ -187,17 +187,20 @@ int dequeue(queue_t* q) {
 		if (q->head == -1 && q->tail == -1) return DEQUEUE_ERROR;	
 		
 		if (q->head != q->tail) {
+			
 			tmp = q->arr[q->head];
 			q->arr[q->head] = -1;
 			q->head = (q->head + 1) % q->size;
 			
 		}
 		else {
+			
 			tmp = q->arr[q->head];
 			for (int i = 0; i < q->size; i++) {
 				q->arr[i] = -1;
 				
 			}
+			
 			q->head = -1;
 			q->tail = -1;
 			return(tmp);
